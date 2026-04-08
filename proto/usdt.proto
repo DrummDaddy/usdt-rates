@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package usdt.v1.proto;
+
+import "google/protobuf/timestamp.proto";
+
+service RateService {
+  rpc GetRates(GetRatesRequest) returns (GetRatesResponse);
+  rpc Healthcheck(HealthcheckRequest) returns (HealthcheckResponse);
+}
+
+message GetRatesRequest {
+  int32 n = 1;
+  int32 m = 2;
+}
+
+message GetRatesResponse {
+  google.protobuf.Timestamp fetched_at = 1;
+
+  string ask_top_n = 2;
+  string ask_avg_n_m = 3;
+
+  string bid_top_n = 4;
+  string bid_avg_n_m = 5;
+
+}
+
+message HealthcheckRequest {}
+
+message HealthcheckResponse {
+  string status = 1;
+}
