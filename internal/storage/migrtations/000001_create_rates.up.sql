@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS rates (
     ask_top_n NUMERIC(40, 18) NOT NULL,
     ask_avg_n_m NUMERIC(40, 18) NOT NULL,
 
-    big_top_n NUMERIC(40, 18) NOT NULL,
+    bid_top_n NUMERIC(40, 18) NOT NULL,
     bid_avg_n_m NUMERIC(40, 18) NOT NULL
 );
 
