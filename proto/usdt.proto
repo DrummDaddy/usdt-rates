@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package usdt.v1.proto;
 
+option go_package = "github.com/DrummDaddy/usdt-rates/gen/usdt/v1;usdtv1";
+
 import "google/protobuf/timestamp.proto";
 
 service RateService {
