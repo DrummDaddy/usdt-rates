@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"net/http"
 	"net/url"
 	"time"
 
@@ -29,7 +30,7 @@ type grinexClient struct {
 func NewGrinexClient(depthURL string, timeout time.Duration) GrinexClient {
 	return &grinexClient{
 		depthURL: depthURL,
-		http: resty.New().
+		http: resty.NewWithClient(http.DefaultClient).
 			SetTimeout(timeout).
 			SetRetryCount(1),
 	}

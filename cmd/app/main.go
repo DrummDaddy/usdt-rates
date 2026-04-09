@@ -15,10 +15,9 @@ import (
 	"github.com/DrummDaddy/usdt-rates/internal/rates/client"
 	"github.com/DrummDaddy/usdt-rates/internal/service"
 	"github.com/DrummDaddy/usdt-rates/internal/storage/postgres"
+	"go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc"
 
 	usdtpb "github.com/DrummDaddy/usdt-rates/gen/gen/usdt/v1"
-
-	"go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc"
 
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
@@ -117,11 +116,7 @@ func main() {
 	}
 
 	grpcServer := grpc.NewServer(
-		grpc.UnaryInterceptor(
-			otelgrpc.UnaryServerInterceptor(
-				otelgrpc.WithTracerProvider(otel.GetTracerProvider()),
-			),
-		),
+		grpc.StatsHandler(otelgrpc.NewServerHandler()),
 	)
 
 	handler := appgrpc.NewHandler(svc)
