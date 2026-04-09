@@ -27,7 +27,6 @@ type grinexClient struct {
 }
 
 func NewGrinexClient(depthURL string, timeout time.Duration) GrinexClient {
-
 	return &grinexClient{
 		depthURL: depthURL,
 		http: resty.New().
@@ -36,16 +35,14 @@ func NewGrinexClient(depthURL string, timeout time.Duration) GrinexClient {
 	}
 }
 
+type depthLevel struct {
+	Price string `json:"price"`
+}
+
 type depthResponse struct {
-	Timestamp int64 `json:"timestamp"`
-
-	Asks []struct {
-		Price string `json:"price"`
-	} `json:"asks"`
-
-	Bids []struct {
-		Price string `json:"price"`
-	} `json:"bids"`
+	Timestamp int64        `json:"timestamp"`
+	Asks      []depthLevel `json:"asks"`
+	Bids      []depthLevel `json:"bids"`
 }
 
 func (c *grinexClient) FetchDepth(ctx context.Context, symbol string) (OrderBook, error) {
@@ -75,7 +72,7 @@ func (c *grinexClient) FetchDepth(ctx context.Context, symbol string) (OrderBook
 		return OrderBook{}, fmt.Errorf("decode grinex json: %w", err)
 	}
 
-	toSide := func(in []struct{ Price string }) ([]decimal.Decimal, error) {
+	toSide := func(in []depthLevel) ([]decimal.Decimal, error) {
 		out := make([]decimal.Decimal, 0, len(in))
 		for _, lv := range in {
 			d, err := decimal.NewFromString(lv.Price)
@@ -88,10 +85,10 @@ func (c *grinexClient) FetchDepth(ctx context.Context, symbol string) (OrderBook
 	}
 
 	asks, err := toSide(parsed.Asks)
-
 	if err != nil {
 		return OrderBook{}, fmt.Errorf("parse asks: %w", err)
 	}
+
 	bids, err := toSide(parsed.Bids)
 	if err != nil {
 		return OrderBook{}, fmt.Errorf("parse bids: %w", err)

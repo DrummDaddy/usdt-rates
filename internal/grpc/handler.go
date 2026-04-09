@@ -3,7 +3,7 @@ package grpc
 import (
 	"context"
 
-	usdtpb "github.com/DrummDaddy/usdt-rates/gen/usdt/v1"
+	usdtpb "github.com/DrummDaddy/usdt-rates/gen/gen/usdt/v1"
 	"github.com/DrummDaddy/usdt-rates/internal/service"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
