@@ -28,9 +28,13 @@ type grinexClient struct {
 }
 
 func NewGrinexClient(depthURL string, timeout time.Duration) GrinexClient {
+	return NewGrinexClientWithHTTPClient(depthURL, http.DefaultClient, timeout)
+}
+
+func NewGrinexClientWithHTTPClient(depthURL string, httpClient *http.Client, timeout time.Duration) GrinexClient {
 	return &grinexClient{
 		depthURL: depthURL,
-		http: resty.NewWithClient(http.DefaultClient).
+		http: resty.NewWithClient(httpClient).
 			SetTimeout(timeout).
 			SetRetryCount(1),
 	}

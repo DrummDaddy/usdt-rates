@@ -25,7 +25,11 @@ func TestAvgNM(t *testing.T) {
 		decimal.NewFromInt(30),
 		decimal.NewFromInt(40),
 	}
+
+	// avg of [2;4] => (20 + 30 + 40) / 3 = 30
 	avg, err := AvgNM(values, 2, 4)
 	require.NoError(t, err)
-	require.Equal(t, decimal.NewFromInt(30), avg)
+
+	expected := decimal.NewFromInt(30)
+	require.True(t, avg.Equal(expected), "expected %s, got %s", expected, avg)
 }

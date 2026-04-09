@@ -3,6 +3,7 @@ package client
 import (
 	"context"
 	"fmt"
+	"net/http"
 	"testing"
 	"time"
 
@@ -27,8 +28,11 @@ func TestFetchDepth_ParsesTimestampAndSides(t *testing.T) {
 	  ]
 	}`, ts)
 
-	httpmock.Activate()
-	defer httpmock.DeactivateAndReset()
+	httpClient := &http.Client{}
+	httpmock.ActivateNonDefault(httpClient)
+	defer func() {
+		httpmock.DeactivateAndReset()
+	}()
 
 	httpmock.RegisterResponder(
 		"GET",
@@ -36,7 +40,7 @@ func TestFetchDepth_ParsesTimestampAndSides(t *testing.T) {
 		httpmock.NewStringResponder(200, jsonBody),
 	)
 
-	c := NewGrinexClient(depthURL, 2*time.Second)
+	c := NewGrinexClientWithHTTPClient(depthURL, httpClient, 2*time.Second)
 	ob, err := c.FetchDepth(context.Background(), symbol)
 	require.NoError(t, err)
 
