@@ -25,7 +25,6 @@ services:
       POSTGRES_DSN: "postgres://postgres:postgres@postgres:5432/usdt?sslmode=disable"
       GRINEX_DEPTH_URL: "https://grinex.io/api/v1/spot/depth"
       GRINEX_TIMEOUT: "5s"
-      OTelOTLPGRPCEndpoint: ""
       OTEL_OTLP_GRPC_ENDPOINT: ""
       OTEL_SERVICE_NAME: "usdt-rates"
     ports:
